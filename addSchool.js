@@ -33,7 +33,7 @@ router.post("/", (req, res) => {
     "INSERT INTO schools(name,address,latitude,longitude) VALUES(?,?,?,?)";
   db.query(querry, [name, address, latitude, longitude], (err, result) => {
     if (err) {
-      res.status(500).send(`Inserting error :${err} `);
+      return res.status(500).send(`Inserting error :${err} `);
     } else {
       res.status(200).send(`school added succesfully`);
       console.log(`school added succesfully`);
