@@ -5,6 +5,7 @@ router.post("/", (req, res) => {
   const { name, address, latitude, longitude } = req.body;
   if (!name || !address || !latitude || !longitude) {
      res.status(400).send("All fields are required");
+     return;
   }
   if (typeof name !== "string") {
      res.status(400).send("Name  must be strings");
