@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("./dbConnection");
-router.post("/", (req, res) => {
+router.post("/",async (req, res) => {
   const { name, address, latitude, longitude } = req.body;
   if (!name || !address || !latitude || !longitude) {
     return res.status(400).send("All fields are required");
@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
 
   const querry =
     "INSERT INTO schools(name,address,latitude,longitude) VALUES(?,?,?,?)";
-  db.query(querry, [name, address, latitude, longitude], (err, result) => {
+ try{ db.query(querry, [name, address, latitude, longitude], (err, result) => {
     if (err) {
       return res.status(500).send(`Inserting error :${err} `);
     } else {
@@ -39,7 +39,9 @@ router.post("/", (req, res) => {
       console.log(`school added succesfully`);
       return;
     }
-  });
+  })}catch(err){
+    return res.status(500).send(`Inserting error :${err} `);
+  }
 });
 
 module.exports = router;

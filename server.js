@@ -11,5 +11,5 @@ const listSchool = require("./listSchool");
 app.use("/addSchool", addSchool);
 app.use("/listSchool", listSchool);
 app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+  console.log("Server is running ");
 });
