@@ -37,6 +37,7 @@ router.post("/", (req, res) => {
     } else {
       res.status(200).send(`school added succesfully`);
       console.log(`school added succesfully`);
+      db.end();
     }
   });
 });
