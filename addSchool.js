@@ -4,35 +4,28 @@ const db = require("./dbConnection");
 router.post("/", (req, res) => {
   const { name, address, latitude, longitude } = req.body;
   if (!name || !address || !latitude || !longitude) {
-     res.status(400).send("All fields are required");
-     return;
+    return res.status(400).send("All fields are required");
   }
   if (typeof name !== "string") {
-     res.status(400).send("Name  must be strings");
-     return;
+    return res.status(400).send("Name  must be strings");
   }
   if (typeof address !== "string") {
-     res.status(400).send(" address must be strings");
-     return;
+    return res.status(400).send(" address must be strings");
   }
   if (typeof latitude !== "number") {
-     res.status(400).send("Latitude must be float values");
-     return;
+    return res.status(400).send("Latitude must be float values");
   }
   if (typeof longitude !== "number") {
-     res.status(400).send(" longitude must be float values");
-     return;
+    return res.status(400).send(" longitude must be float values");
   }
   const checkQuery =
     "SELECT * FROM schools WHERE latitude = ? AND longitude = ?";
   db.query(checkQuery, [latitude, longitude], (err, results) => {
     if (err) {
-       res.status(500).send(`Error checking for existing school: ${err}`);
-       return;
+      return res.status(500).send(`Error checking for existing school: ${err}`);
     }
     if (results.length > 0) {
-       res.status(400).send("School already exists at this location");
-       return;
+      return res.status(400).send("School already exists at this location");
     }
   });
 
@@ -40,12 +33,11 @@ router.post("/", (req, res) => {
     "INSERT INTO schools(name,address,latitude,longitude) VALUES(?,?,?,?)";
   db.query(querry, [name, address, latitude, longitude], (err, result) => {
     if (err) {
-       res.status(500).send(`Inserting error :${err} `);
-       return;
+      return res.status(500).send(`Inserting error :${err} `);
     } else {
       res.status(200).send(`school added succesfully`);
       console.log(`school added succesfully`);
-     
+      return;
     }
   });
 });
