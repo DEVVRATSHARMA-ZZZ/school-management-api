@@ -1,13 +1,5 @@
 const express = require("express");
-const connectToDb = require("./dbConnection");
-
-(async () => {
-  try {
-    const db = await connectToDb();
-  } catch (err) {
-    console.error("Database connection failed:", err);
-  }
-})();
+const db = require("./dbConnection");
 
 const app = express();
 app.use(express.json());
