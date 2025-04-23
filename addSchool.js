@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("./dbConnection");
+const connectToDB = require("./dbConnection");
 router.post("/", async (req, res) => {
   const { name, address, latitude, longitude } = req.body;
   if (!name || !address || !latitude || !longitude) {
@@ -18,18 +18,21 @@ router.post("/", async (req, res) => {
   if (typeof longitude !== "number") {
     return res.status(400).send(" longitude must be float values");
   }
-  const checkQuery =
-    "SELECT * FROM schools WHERE latitude = ? AND longitude = ?";
-  db.query(checkQuery, [latitude, longitude], (err, results) => {
-    if (err) {
-      return res.status(500).send(`Error checking for existing school: ${err}`);
-    }
-    if (results.length > 0) {
-      return res.status(400).send("School already exists at this location");
-    }
-  });
-
   try {
+    const db = await connectToDB();
+    const checkQuery =
+      "SELECT * FROM schools WHERE latitude = ? AND longitude = ?";
+    db.query(checkQuery, [latitude, longitude], (err, results) => {
+      if (err) {
+        return res
+          .status(500)
+          .send(`Error checking for existing school: ${err}`);
+      }
+      if (results.length > 0) {
+        return res.status(400).send("School already exists at this location");
+      }
+    });
+
     const querry =
       "INSERT INTO schools(name,address,latitude,longitude) VALUES(?,?,?,?)";
     db.query(querry, [name, address, latitude, longitude], (err, result) => {
