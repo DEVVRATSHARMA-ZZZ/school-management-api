@@ -20,20 +20,7 @@ router.post("/", async (req, res) => {
   }
   try {
     const db = await connectToDB();
-    const checkQuery =
-      "SELECT * FROM schools WHERE latitude = ? AND longitude = ?";
-    db.query(checkQuery, [latitude, longitude], (err, results) => {
-      if (err) {
-        return res
-          .status(500)
-          .send(`Error checking for existing school: ${err}`);
-      }
-      if (results.length > 0) {
-        return res.status(400).send("School already exists at this location");
-      }
-    });
-
-    const querry =
+   const querry =
       "INSERT INTO schools(name,address,latitude,longitude) VALUES(?,?,?,?)";
     db.query(querry, [name, address, latitude, longitude], (err, result) => {
       if (err) {
